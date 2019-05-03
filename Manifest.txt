@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: ru.ifmo.rain.chizhikov.jarimplementor.JarImplementor
+Implementation-Vendor: Chizhikov Dmitriy
+Class-path: C:\Users\dimka\IdeaProjects\Java-advanced-2019\java-advanced-2019\artifacts\info.kgeorgiy.java.advanced.implementor.jar
