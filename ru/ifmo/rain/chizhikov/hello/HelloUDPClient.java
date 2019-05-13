@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
+
 
 public class HelloUDPClient implements HelloClient {
 
@@ -53,15 +53,15 @@ public class HelloUDPClient implements HelloClient {
                                 datagramSocket.send(packet);
                                 datagramSocket.receive(response);
                             } catch (SocketTimeoutException e) {
-                                System.err.println("ERROR: Timeout: " + e);
+                                System.err.println("ERROR: Timeout: " + e.getMessage());
                             } catch (PortUnreachableException e) {
-                                System.err.println("ERROR: Socket connection destination is currently unavailable: " + e);
+                                System.err.println("ERROR: Socket connection destination is currently unavailable: " + e.getMessage());
                             } catch (IOException e) {
-                                System.err.println("ERROR: I/O exception while sending: " + e);
+                                System.err.println("ERROR: I/O exception while sending: " + e.getMessage());
                             }
 
                             String result = new String(response.getData(), response.getOffset(), response.getLength(), StandardCharsets.UTF_8);
-                            if (result.matches(".*" + Pattern.quote(request) + "(|\\p{Space}.*)")) {
+                            if (result.contains(request)) {
                                 System.out.println(result);
                                 break;
                             }
@@ -69,11 +69,11 @@ public class HelloUDPClient implements HelloClient {
                     }
                 } catch (SocketException e) {
                     System.err.println("ERROR: the socket could not be opened," +
-                            "or the socket could not bind to the specified local port." + e);
+                            "or the socket could not bind to the specified local port." + e.getMessage());
                 }
             }));
         }
-        workers.shutdown();
+        workers.shutdownNow();
 
         try {
             workers.awaitTermination(numberOfThreads * numberOfRequests, TimeUnit.MINUTES);

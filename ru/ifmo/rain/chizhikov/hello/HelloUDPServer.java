@@ -11,10 +11,6 @@ import java.util.Objects;
 import java.util.concurrent.*;
 
 public class HelloUDPServer implements HelloServer {
-    private ExecutorService workers;
-    private ExecutorService receiver;
-    private DatagramSocket socket;
-    private boolean closed = true;
 
     public static void main(String[] args) {
         try {
@@ -32,11 +28,8 @@ public class HelloUDPServer implements HelloServer {
             socket = new DatagramSocket(port);
 
             receiver = Executors.newSingleThreadExecutor();
-            workers = new ThreadPoolExecutor(threads, threads,
-                    1, TimeUnit.MINUTES,
-                    new ArrayBlockingQueue<>(100000), new ThreadPoolExecutor.DiscardPolicy());
+            workers = Executors.newFixedThreadPool(threads);
 
-            closed = false;
         } catch (SocketException e) {
             System.err.println("ERROR: Unable to create socket connected to port " + port);
             return;
@@ -60,13 +53,11 @@ public class HelloUDPServer implements HelloServer {
                         try {
                             socket.send(response);
                         } catch (IOException e) {
-                            if (!closed) {
-                                System.err.println("ERROR: I/O exception while sending: " + e.getMessage());
-                            }
+                            System.err.println("ERROR: I/O exception while sending: " + e.getMessage());
                         }
                     });
                 } catch (IOException e) {
-                    if (!closed) {
+                    if (!socket.isClosed()) {
                         System.err.println("ERROR: I/O exception with datagram: " + e.getMessage());
                     }
                 }
@@ -76,7 +67,6 @@ public class HelloUDPServer implements HelloServer {
 
     @Override
     public void close() {
-        closed = true;
         socket.close();
         receiver.shutdownNow();
         workers.shutdownNow();
@@ -86,4 +76,8 @@ public class HelloUDPServer implements HelloServer {
         } catch (InterruptedException ignored) {
         }
     }
+
+    private ExecutorService workers;
+    private ExecutorService receiver;
+    private DatagramSocket socket;
 }
