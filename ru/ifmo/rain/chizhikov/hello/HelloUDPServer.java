@@ -10,8 +10,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.concurrent.*;
 
+/**
+ *  Implementation of {@link HelloServer}.
+ */
 public class HelloUDPServer implements HelloServer {
 
+    /**
+     * Main function for starting {@link HelloUDPServer}.
+     *
+     * Usage: <port> <number of threads.
+     * @param args array of arguments: {@link Integer} port, {@link Integer} threads.
+     */
     public static void main(String[] args) {
         try {
             int port = Integer.parseInt(Objects.requireNonNull(args[0]));
@@ -23,6 +32,11 @@ public class HelloUDPServer implements HelloServer {
         }
     }
 
+    /**
+     * Starts new {@link HelloUDPServer}
+     * @param port server port.
+     * @param threads  threads number of working threads.
+     */
     public void start(int port, int threads) {
         try {
             socket = new DatagramSocket(port);
@@ -65,6 +79,9 @@ public class HelloUDPServer implements HelloServer {
         });
     }
 
+    /**
+     * Stops server and deallocates all resources.
+     */
     @Override
     public void close() {
         socket.close();

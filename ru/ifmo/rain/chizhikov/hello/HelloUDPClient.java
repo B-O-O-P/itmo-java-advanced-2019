@@ -11,8 +11,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 
+/**
+ * Implementation of {@link HelloClient} class.
+ */
 public class HelloUDPClient implements HelloClient {
 
+    /**
+     * Main function for starting {@link HelloUDPClient}.
+     *
+     * Usage: <host> <prefix> <port> <number of threads> <number of requests>.
+     * @param args Array of arguments: {@link String} host, {@link String} prefix, {@link Integer} number of threads, {@link Integer} number of requests.
+     */
     public static void main(String[] args) {
         try {
             String host = args[0];
@@ -27,6 +36,15 @@ public class HelloUDPClient implements HelloClient {
         }
     }
 
+    /**
+     * Runs {@link HelloClient}.
+     *
+     * @param host server host.
+     * @param port server port.
+     * @param prefix request prefix.
+     * @param numberOfThreads number of request threads.
+     * @param numberOfRequests number of requests per thread.
+     */
     @Override
     public void run(String host, int port, String prefix, int numberOfThreads, int numberOfRequests) {
         InetSocketAddress socketAddress = new InetSocketAddress(host, port);
