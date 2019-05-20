@@ -9,7 +9,7 @@ import java.util.Random;
 import java.util.Set;
 
 /**
- * Class for {@link org.junit.Test} {@link Bank} class.
+ * Class for {@link org.junit.Test} {@link Bank} class. Run rmiregistry.exe for starting testing.
  */
 public class Test {
     private static Bank bank;
